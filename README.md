@@ -34,12 +34,6 @@ offline before starting the updated server:
 openssl rand -hex 32
 openssl rand -base64 48
 
-# With the server stopped, retrieve the stored values from your secret manager.
-# These prompts do not echo the secrets or put them in shell history.
-read -rsp 'DB_ENCRYPTION_KEY: ' DB_ENCRYPTION_KEY; printf '\n'; export DB_ENCRYPTION_KEY
-read -rsp 'SYSTEM_BACKUP_KEY: ' SYSTEM_BACKUP_KEY; printf '\n'; export SYSTEM_BACKUP_KEY
-export SYSTEM_BACKUP_PATH=/secure/backups/before-db-encryption.vdb
-export ENABLE_DATA_ENCRYPTION_MIGRATION=1
 
 node backend/scripts/encrypt-database.js --dry-run
 node backend/scripts/encrypt-database.js
