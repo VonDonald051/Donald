@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             } catch (e) { toast(e.message, 'err'); }
           }
         }, '🔑 Reset password'),
-        h('button', { class: 'btn sm ghost', onclick: async () => { try { const r = await api.post(`/api/vsa/users/${u.id}/toggle-disabled`); toast(r.disabled ? 'Account suspended' : 'Account activated'); loaders.admins(); } catch (e) { toast(e.message, 'err'); } } }, u.disabled ? 'Activate' : 'Suspend'),
+        h('button', { class: 'btn sm ghost', onclick: async () => { try { const r = await api.post(`/api/vsa/users/${u.id}/toggle-disabled`, { currentPassword: askVsaPw() }); toast(r.disabled ? 'Account suspended' : 'Account activated'); loaders.admins(); } catch (e) { toast(e.message, 'err'); } } }, u.disabled ? 'Activate' : 'Suspend'),
         h('button', {
           class: 'btn sm danger', onclick: async () => {
             if (!confirm(`DELETE ${u.role} ${u.email}? This cannot be undone.`)) return;
@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const g = prompt(`Group (id) — options: ${Object.entries(gmap).map(([i, n]) => i + '=' + n).join(', ')}:`, u.groupId || '');
       if (g) body.groupId = g;
     }
-    try { await api.put(`/api/vsa/users/${u.id}`, body); toast('Updated'); loaders.admins(); }
+    try { body.currentPassword = askVsaPw(); await api.put(`/api/vsa/users/${u.id}`, body); toast('Updated'); loaders.admins(); }
     catch (e) { toast(e.message, 'err'); }
   }
   document.getElementById('na-go').addEventListener('click', async () => {
@@ -226,7 +226,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           }, '🔓 Unlock / re-enable'),
           h('button', {
             class: 'btn sm ghost', onclick: async () => {
-              try { const r = await api.post(`/api/vsa/users/${u.id}/toggle-disabled`); toast(r.disabled ? 'Login disabled' : 'Login enabled'); loaders.locked(); }
+              try { const r = await api.post(`/api/vsa/users/${u.id}/toggle-disabled`, { currentPassword: askVsaPw() }); toast(r.disabled ? 'Login disabled' : 'Login enabled'); loaders.locked(); }
               catch (e) { toast(e.message, 'err'); }
             }
           }, u.disabled ? 'Enable login' : 'Disable login')))));

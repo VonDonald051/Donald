@@ -9,6 +9,33 @@ WebRTC video calls, email notifications and per-group PDF/CSV reports.
 - **Python:** independent security-audit layer — **16 checks**
 - **Storage:** atomic JSON store (`database/data/db.json`) — no SQL ⇒ no SQL injection by construction
 
+## Convex backend migration
+
+The Node backend is being migrated in stages. The current Convex development deployment is
+`upbeat-rhinoceros-988` in project `donal-s`. Imported user, group, finance, agreement, and audit
+records are stored in a temporary `legacyRecords` table while route logic is ported. Active session
+tokens were excluded; users need to sign in again when using the Convex API.
+
+Convex currently serves health, public groups/branding, registration and password login/logout;
+member profile, password, public-key, notification, finance, loan and statement endpoints; member
+dashboard data; Group Admin dashboard, loan, payment, safe-code, request, announcement and inventory
+endpoints; encrypted chat; admin audit/agreement status; and V Super Admin overview, users, groups,
+audit, safe-code and settings endpoints. This is still a partial route migration. The frontend
+continues using Node by default, and many write/report/auth flows are not yet ported. Production has
+not been changed.
+
+For the cross-origin frontend cutover, the Vercel origin is `https://donald-ss.vercel.app`.
+`CORS_ALLOWED_ORIGINS` is configured to that exact origin on the development deployment. Provide
+`window.CONVEX_API_BASE_URL` before `runtime-config.js` loads (the Convex HTTP API hostname ends in
+`.convex.site`) when switching the frontend to Convex. Convex only returns credentialed CORS headers
+for exact origins in that list; do not use a wildcard origin. The frontend still uses Node by
+default until its API base URL is switched.
+
+Run `npm run typecheck:convex` to type-check the Convex functions and `npx convex dev --once` to
+deploy to the configured development deployment. `node scripts/export-legacy-convex.js` creates a
+permission-restricted temporary JSONLines export from the encrypted local database; review the
+target deployment before importing it, and remove the export afterward.
+
 ## Roles & themes
 
 | Role | Dashboard | Animated background |

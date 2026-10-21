@@ -1,4 +1,6 @@
 'use strict';
-// Keep empty when the frontend and API share an origin. For a split local setup,
-// set this to the backend origin, for example: http://localhost:3000.
-window.API_BASE_URL = window.API_BASE_URL || '';
+// Set window.CONVEX_API_BASE_URL before this file when the frontend is deployed
+// separately. A meta tag also supports static hosts. Empty preserves same-origin
+// Node development until the Convex API cutover is complete.
+const convexApiMeta = document.querySelector('meta[name="convex-api-base"]');
+window.API_BASE_URL = window.API_BASE_URL || window.CONVEX_API_BASE_URL || convexApiMeta?.content || '';
