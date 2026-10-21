@@ -126,6 +126,10 @@ class App {
     throw new Error('unsupported use() argument');
   }
   get(p, ...h) { this.routes.push({ method: 'GET', handlers: h, ...compilePath(p) }); return this; }
+  post(p, ...h) { this.routes.push({ method: 'POST', handlers: h, ...compilePath(p) }); return this; }
+  put(p, ...h) { this.routes.push({ method: 'PUT', handlers: h, ...compilePath(p) }); return this; }
+  delete(p, ...h) { this.routes.push({ method: 'DELETE', handlers: h, ...compilePath(p) }); return this; }
+  patch(p, ...h) { this.routes.push({ method: 'PATCH', handlers: h, ...compilePath(p) }); return this; }
   listen(port, host, cb) {
     if (typeof host === 'function') return this.server.listen(port, host);
     return this.server.listen(port, host, cb);
