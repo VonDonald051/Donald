@@ -1,0 +1,25 @@
+{
+  "name": "vondonald-savings-system",
+  "version": "2.0.0",
+  "private": true,
+  "description": "VonDonald051 Savings - multi-role group management system with a custom Node.js backend, vanilla frontend, and controlled security dependencies.",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "provision-owner": "node backend/provision-owner.js",
+    "backup": "node backend/scripts/backup.js",
+    "reset-accounts": "node backend/scripts/reset-accounts.js",
+    "remove-agreements": "node backend/scripts/remove-agreements.js",
+    "migrate": "node backend/scripts/migrate.js",
+    "audit": "python3 backend/security_audit.py",
+    "test": "node backend/tests/phase9.test.js",
+    "encrypt-database": "node backend/scripts/encrypt-database.js",
+    "check": "node --check backend/server.js && node --check backend/provision-owner.js && node --check backend/scripts/maintenance-common.js && node --check backend/scripts/backup.js && node --check backend/scripts/reset-accounts.js && node --check backend/scripts/remove-agreements.js && node --check backend/scripts/migrate.js && node --check backend/scripts/encrypt-database.js && node --check backend/migrations/001-system-agreements.js && node --check backend/src/agreement-codes.js && node --check backend/src/agreement-pdf.js && node --check backend/src/agreement-verification.js && node --check backend/src/agreement-storage.js && node --check backend/src/agreement-upload.js && node --check backend/src/system-agreement-views.js && node --check backend/src/chat-policy.js && node --check backend/src/chat-retention.js && node --check backend/src/socket.js && node --check backend/src/ws.js && node --check backend/src/routes/chat.js && node --check backend/src/pdf.js && node --check backend/src/qrcode.js && node --check backend/src/httpmini.js && node --check backend/src/db.js && node --check backend/src/db-crypto.js && node --check backend/src/security.js && node --check backend/src/finance-trends.js && node --check backend/src/google-login.js && node --check backend/src/phone-verification.js && node --check backend/src/security-monitor.js && node --check backend/src/sentinel.js && node --check backend/src/emailer.js && node --check backend/src/routes/auth.js && node --check backend/src/routes/me.js && node --check backend/src/routes/member.js && node --check backend/src/routes/ga.js && node --check backend/src/routes/admin.js && node --check backend/src/routes/vsa.js && node --check backend/tests/phase9.test.js && node --check frontend/public/js/login.js && node --check frontend/public/js/api.js && node --check frontend/public/js/member.js && node --check frontend/public/js/ga.js && node --check frontend/public/js/dash.js && node --check frontend/public/js/admin.js && node --check frontend/public/js/vsa.js && node --check frontend/public/js/finance-chart.js && node --check frontend/public/js/ws.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "bcrypt": "^6.0.0"
+  }
+}

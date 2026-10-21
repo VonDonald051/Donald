@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Request a Safe Code · VonDonald051 Savings</title>
+<link rel="stylesheet" href="/css/auth.css">
+</head>
+<body>
+  <canvas id="ring"></canvas>
+
+  <main class="shell wide register-shell">
+    <h1 class="brand">Request a Safe Code</h1>
+    <div id="err" class="err" hidden></div>
+    <div id="done" class="ok" hidden></div>
+    <form id="f" novalidate>
+      <div class="grid2">
+        <div>
+          <label class="lbl" for="firstName">First Name</label>
+          <div class="inp-pill"><input id="firstName" required></div>
+          <div class="ferr" id="e-firstName"></div>
+        </div>
+        <div>
+          <label class="lbl" for="lastName">Last Name</label>
+          <div class="inp-pill"><input id="lastName" required></div>
+          <div class="ferr" id="e-lastName"></div>
+        </div>
+      </div>
+
+      <label class="lbl" for="email">Email</label>
+      <div class="inp-pill"><input id="email" type="email" required></div>
+      <div class="ferr" id="e-email"></div>
+
+      <label class="lbl" for="phone">Phone Number</label>
+      <div class="inp-pill"><input id="phone" type="tel" placeholder="+2547XXXXXXXX" required></div>
+      <div class="ferr" id="e-phone"></div>
+
+      <label class="lbl" for="groupId">Group to Join</label>
+      <select id="groupId" class="native" required></select>
+      <div class="ferr" id="e-groupId"></div>
+
+      <label class="lbl" for="note">Message to the Group Admin (optional)</label>
+      <div class="inp-pill"><input id="note"></div>
+
+      <button class="btn" id="go" type="submit">Send Request</button>
+    </form>
+    <a class="signup" href="/login.html">← Back to Login</a>
+  </main>
+
+  <footer class="foot">The Group Admin of your chosen group will generate a one-time Safe Code for you</footer>
+<script src="/js/runtime-config.js"></script>
+<script src="/js/api.js"></script>
+  <script src="/js/ring.js"></script>
+  <script src="/js/request.js"></script>
+</body>
+</html>

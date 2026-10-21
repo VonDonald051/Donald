@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Reset Password · VonDonald051 Savings</title>
+<link rel="stylesheet" href="/css/auth.css">
+</head>
+<body>
+  <canvas id="ring"></canvas>
+
+  <main class="shell">
+    <h1 class="brand">Reset Password</h1>
+    <div id="err" class="err" hidden></div>
+    <div id="done" class="ok" hidden></div>
+    <form id="f" novalidate>
+      <label class="lbl" for="password">New Password</label>
+      <div class="inp-pill"><input id="password" type="password" autocomplete="new-password" placeholder="9+ chars, mixed" required></div>
+      <label class="lbl" for="confirm">Confirm New Password</label>
+      <div class="inp-pill"><input id="confirm" type="password" autocomplete="new-password" required></div>
+      <button class="btn" id="go" type="submit" style="margin-top:14px">Reset password</button>
+    </form>
+    <a class="signup" href="/login.html">← Back to Login</a>
+  </main>
+
+<script src="/js/runtime-config.js"></script>
+<script src="/js/api.js"></script>
+  <script src="/js/ring.js"></script>
+  <script src="/js/reset.js"></script>
+</body>
+</html>

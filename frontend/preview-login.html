@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Login preview · VonDonald051 Savings</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:'Segoe UI',system-ui,-apple-system,Roboto,'Helvetica Neue',Arial,sans-serif;
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  color:#dff9ff;padding:24px;overflow-x:hidden;position:relative;
+  background:radial-gradient(1300px 900px at 50% 42%, #20253a 0%, #171b2c 50%, #111424 100%);
+}
+canvas#ring{position:fixed;inset:0;z-index:0;pointer-events:none}
+.shell{position:relative;z-index:2;width:min(92vw,340px);padding:12px 0 30px}
+.brand{text-align:center;font-size:27px;font-weight:600;color:#a5ecf4;letter-spacing:.5px;margin:0 0 26px}
+.lbl{display:block;margin:0 9px 6px;color:#85d9e6;font-size:13.5px;font-weight:500}
+.inp-pill{position:relative;margin-bottom:15px}
+.inp-pill input{width:100%;height:46px;padding:0 20px;border-radius:999px;border:2px solid rgba(126,222,238,.72);
+  background:rgba(9,13,27,.42);color:#eafeff;font-size:14.5px;outline:none;transition:.18s}
+.inp-pill input::placeholder{color:rgba(180,215,230,.55)}
+.inp-pill input:focus{border-color:#9df2ff;box-shadow:0 0 16px rgba(126,222,238,.32)}
+.under{display:flex;align-items:center;gap:12px;margin:-4px 4px 22px}
+.keybtn{width:44px;height:44px;min-width:44px;border-radius:50%;border:2px solid rgba(140,228,240,.9);
+  background:rgba(9,13,27,.35);color:#9df2ff;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.keybtn svg{width:19px;height:19px}
+.check{display:flex;align-items:center;gap:7px;font-size:12.5px;color:#8ea3ba;cursor:pointer;user-select:none}
+.check input{width:14px;height:14px;accent-color:#8fe6f2}
+.forgot{margin-left:auto;color:#85d9e6;font-size:13px;text-decoration:none}
+.btn{width:100%;height:48px;border:0;border-radius:999px;background:linear-gradient(180deg,#b0f1f8,#85e0ee);
+  color:#0b2434;font-weight:800;font-size:15.5px;cursor:pointer;box-shadow:0 8px 26px rgba(110,224,240,.28)}
+.signup{display:block;text-align:center;margin-top:24px;color:#8fe6f2;font-size:14.5px;text-decoration:underline;text-underline-offset:3px}
+.alt2{text-align:center;font-size:12.5px;margin-top:8px;color:#8ea3ba}
+.alt2 a{color:#ffd793}
+.foot{position:fixed;bottom:14px;left:0;right:0;text-align:center;font-size:11.5px;color:#5f7186}
+</style>
+</head>
+<body>
+  <canvas id="ring"></canvas>
+  <main class="shell">
+    <h1 class="brand">Login</h1>
+    <form>
+      <label class="lbl" for="email">Email</label>
+      <div class="inp-pill"><input id="email" type="email" placeholder="you@example.com"></div>
+      <label class="lbl" for="password">Password</label>
+      <div class="inp-pill"><input id="password" type="password" placeholder="••••••••"></div>
+      <div class="under">
+        <button type="button" class="keybtn" title="Show / hide password">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21 2-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0 3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+        </button>
+        <label class="check"><input type="checkbox"> Remember me</label>
+        <a class="forgot" href="#">Forgot Password?</a>
+      </div>
+      <button class="btn" type="button">Login</button>
+    </form>
+    <a class="signup" href="#">Sign up</a>
+    <p class="alt2">No account yet? <a href="#">Request a safe code</a> from your group admin</p>
+  </main>
+<script>
+(function(){
+  const cv=document.getElementById('ring');const ctx=cv.getContext('2d');
+  const DPR=Math.min(devicePixelRatio||1,2);let W,H,cx,cy,R,t=0;const SEG=46,TICK=0.34;
+  function rs(){W=innerWidth;H=innerHeight;cv.width=W*DPR;cv.height=H*DPR;cv.style.width=W+'px';cv.style.height=H+'px';ctx.setTransform(DPR,0,0,DPR,0,0);cx=W/2;cy=H*0.46;R=Math.min(W,H)*0.42;}
+  rs();addEventListener('resize',rs);
+  function ad(a,b){let d=Math.abs(a-b)%(Math.PI*2);return d>Math.PI?Math.PI*2-d:d;}
+  (function draw(){
+    ctx.clearRect(0,0,W,H);t+=0.0035;
+    const hl=Math.PI*0.28+Math.sin(t*0.6)*0.9+t*0.22;
+    ctx.lineCap='round';ctx.lineWidth=Math.max(8,R*0.045);
+    for(let i=0;i<SEG;i++){
+      const a=t+(i*Math.PI*2)/SEG;const d=ad(a%(Math.PI*2),hl%(Math.PI*2));const k=Math.max(0,1-d/0.55);
+      if(k>0){ctx.strokeStyle=`rgba(${Math.floor(95+20*k)},${Math.floor(210+40*k)},${Math.floor(205+20*k)},${0.55+0.45*k})`;ctx.shadowColor='rgba(95,242,205,0.9)';ctx.shadowBlur=16*k;}
+      else{ctx.strokeStyle='rgba(84,98,138,0.42)';ctx.shadowBlur=0;}
+      ctx.beginPath();ctx.arc(cx,cy,R,a,a+TICK);ctx.stroke();
+    }
+    ctx.shadowBlur=0;requestAnimationFrame(draw);
+  })();
+})();
+</script>
+<footer>Developed by Donald</footer>
+</body>
+</html>

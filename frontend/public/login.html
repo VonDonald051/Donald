@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Login · VonDonald051 Savings</title>
+<link rel="stylesheet" href="/css/auth.css">
+</head>
+<body>
+  <canvas id="ring"></canvas>
+
+  <main class="shell login-layout">
+    <section class="login-form-panel">
+    <h1 class="brand">Login</h1>
+    <div id="err" class="err" hidden></div>
+    <form id="f" autocomplete="on" novalidate>
+      <label class="lbl" for="email">Email</label>
+      <div class="inp-pill">
+        <input id="email" type="email" autocomplete="email" placeholder="you@example.com" required>
+      </div>
+      <div class="ferr" id="e-email"></div>
+
+      <label class="lbl" for="password">Password</label>
+      <div class="inp-pill">
+        <input id="password" type="password" autocomplete="current-password" placeholder="••••••••" required>
+      </div>
+      <div class="ferr" id="e-password"></div>
+
+      <div class="under">
+        <button type="button" class="keybtn" id="peek" title="Show / hide password">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21 2-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0 3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+        </button>
+        <label class="check"><input type="checkbox" id="remember"> Remember me</label>
+        <a class="forgot" href="/forgot.html">Forgot Password?</a>
+      </div>
+
+      <button class="btn" id="go" type="submit">Login</button>
+    </form>
+    <div id="phone-step" hidden>
+      <p id="phone-hint" class="alt2">Enter the one-time passcode sent to your registered phone.</p>
+      <form id="phone-form" autocomplete="one-time-code" novalidate>
+        <label class="lbl" for="phone-code">Phone passcode</label>
+        <div class="inp-pill">
+          <input id="phone-code" type="text" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]*" maxlength="10" required>
+        </div>
+        <button class="btn" id="phone-go" type="submit">Verify passcode</button>
+      </form>
+    </div>
+    <div id="google-separator" class="alt2">or</div>
+    <a class="btn google-disabled" id="google-login" href="/api/auth/google" aria-disabled="true">Continue with Google</a>
+    <a class="signup" href="/register.html">Sign up</a>
+    <p class="alt2">No account yet? <a href="/request.html">Request a safe code</a> from your group admin</p>
+    </section>
+    <aside class="login-brand-panel" aria-label="System identity">
+      <img id="login-brand-logo" alt="System logo" hidden>
+      <h2 id="login-brand-name">VonDonald051 Savings</h2>
+      <p>Secure access to your savings group</p>
+    </aside>
+  </main>
+
+<script src="/js/runtime-config.js"></script>
+<script src="/js/api.js"></script>
+  <script src="/js/ring.js"></script>
+  <script src="/js/login.js"></script>
+</body>
+</html>

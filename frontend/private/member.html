@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Member · VonDonald051 Savings</title>
+<link rel="stylesheet" href="/css/dash.css">
+</head>
+<body data-theme="white">
+<canvas id="bg"></canvas>
+
+<aside class="side">
+  <div class="brand"><span class="dot"></span><span id="brand-txt">VonDonald051</span></div>
+  <div class="who">
+    <img id="u-pic" alt="profile picture">
+    <div class="meta"><div class="nm" id="u-name"></div><div class="rl" id="u-role"></div></div>
+  </div>
+  <nav id="nav" style="display:flex;flex-direction:column;gap:5px"></nav>
+  <div class="grow"></div>
+  <a class="navlink" href="#" id="logout"><span class="ico">🚪</span><span class="lbl">Logout</span></a>
+</aside>
+
+<main>
+  <section class="view on" id="view-ov">
+    <div class="hdr"><div><h2>My Dashboard</h2><div class="sub">Your group and account overview</div></div></div>
+    <div class="grid cols3" id="ov-stats"></div>
+    <div class="card mt">
+      <div class="hdr"><div><h3>My savings and loan progress</h3><div class="sub">Monthly KES totals: verified savings compared with outstanding loans · last 12 months</div></div><span class="small muted" id="member-finance-updated">Loading…</span></div>
+      <div class="grid cols4" id="member-finance-stats"></div>
+      <div id="member-finance-chart" class="finance-chart-wrap" aria-live="polite"></div>
+    </div>
+    <div class="card mt">
+      <h3 class="mb">Borrow</h3>
+      <div class="grid cols2">
+        <button class="btn" id="quick-cash-loan" type="button">Request cash loan</button>
+        <button class="btn ghost" id="quick-item-loan" type="button">Request item loan</button>
+      </div>
+      <div class="small muted mt" id="loan-limit"></div>
+      <label class="f" for="loan-type">Loan type</label>
+      <select class="inp" id="loan-type"><option value="cash">Cash loan</option><option value="item">Item loan</option></select>
+      <div id="cash-fields"><label class="f" for="loan-amount">Amount (KES)</label><input class="inp" id="loan-amount" type="number" min="1" step="0.01"></div>
+      <div id="item-fields" hidden><label class="f" for="loan-item">Item</label><select class="inp" id="loan-item"></select></div>
+      <div class="mt"><button class="btn" id="loan-request" type="button">Submit loan request</button></div>
+    </div>
+    <div class="grid cols2 mt">
+      <div class="card" id="ov-group"></div>
+      <div class="card" id="ov-ga"></div>
+    </div>
+    <div class="grid cols2 mt" id="ov-kit"></div>
+  </section>
+
+  <section class="view" id="view-savings">
+    <div class="hdr"><div><h2>My Savings</h2><div class="sub">Registration fee and savings are tracked separately</div></div></div>
+    <div class="grid cols2">
+      <div class="card" id="saving-account-status"></div>
+      <div class="card" id="saving-entry"></div>
+    </div>
+    <div class="card wrap mt"><table class="tbl" id="my-savings-tbl"></table></div>
+  </section>
+
+  <section class="view" id="view-chat">
+    <div class="hdr"><div><h2>Encrypted Chat &amp; Video Calls</h2><div class="sub">Private line to your group admin — end-to-end encrypted</div></div></div>
+    <div class="chatwrap">
+      <div class="clist" id="cList"></div>
+      <div class="chatcol">
+        <div class="chathead">
+          <div class="who2"><img id="cPeerPic" alt=""><span id="cPeerName">Select contact</span></div>
+          <div class="btnrow"><span class="e2e">🔒 End-to-end encrypted</span>
+            <button class="btn sm" id="cCall" disabled>📹 Video Call</button></div>
+        </div>
+        <div class="msgs" id="cMsgs"><div class="sysline">Pick your group admin on the left to start.</div></div>
+        <div class="typing" id="cTyping"></div>
+        <div class="composer">
+          <input class="inp" id="cInput" placeholder="Type an encrypted message…" disabled>
+          <button class="btn" id="cSend" disabled>Send</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="view" id="view-loans">
+    <div class="hdr"><div><h2>My Loans</h2><div class="sub">Cash loans are due 14 days after disbursement; a one-time 1% principal fine applies after the due date.</div></div></div>
+    <div class="card wrap"><table class="tbl" id="my-loans-tbl"></table><div id="loan-paging" class="small muted mt"></div></div>
+  </section>
+
+  <section class="view" id="view-fines">
+    <div class="hdr"><div><h2>My Fines</h2><div class="sub">Fines are recorded separately from savings.</div></div></div>
+    <div class="card wrap"><table class="tbl" id="my-fines-tbl"></table><div id="fines-totals" class="mt small"></div></div>
+  </section>
+
+  <section class="view" id="view-notif"></section>
+  <section class="view" id="view-profile"></section>
+</main>
+
+<div class="callmodal" id="callModal">
+  <div class="callbox">
+    <h3 id="callTitle">Video Call</h3>
+    <div class="vids"><video id="remoteV" autoplay playsinline></video><video id="localV" autoplay playsinline muted></video></div>
+    <div class="muted small mt" id="callStatus" style="text-align:center"></div>
+    <div class="callfoot">
+      <button class="btn" id="btnAccept">✅ Accept</button>
+      <button class="btn danger" id="btnDecline">❌ Decline</button>
+      <button class="btn danger" id="btnEnd">⏹ End call</button>
+    </div>
+  </div>
+</div>
+
+<script src="/js/runtime-config.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/ws.js"></script>
+<script src="/js/bg.js"></script>
+<script src="/js/dash.js?v=role-colors-20261012"></script>
+<script src="/js/crypto.js"></script>
+<script src="/js/chat.js"></script>
+<script src="/js/finance-chart.js"></script>
+<script src="/js/member.js"></script>
+</body>
+</html>

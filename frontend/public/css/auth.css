@@ -1,0 +1,108 @@
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:'Segoe UI',system-ui,-apple-system,Roboto,'Helvetica Neue',Arial,sans-serif;
+  min-height:100vh;display:flex;align-items:flex-start;justify-content:center;
+  color:#dff9ff;padding:16px;overflow-x:hidden;position:relative;
+  background:radial-gradient(1300px 900px at 50% 42%, #20253a 0%, #171b2c 50%, #111424 100%);
+}
+canvas#ring{position:fixed;inset:0;z-index:0;pointer-events:none}
+.register-page{align-items:center}
+
+/* ---- centered auth column (no card - floats inside the neon ring) ---- */
+.shell{position:relative;z-index:2;width:min(100%,340px);padding:16px 0 24px;margin:auto}
+.login-layout{width:min(100%,900px);display:grid;grid-template-columns:minmax(300px,1fr) minmax(250px,.8fr);align-items:stretch;gap:42px;padding:30px;margin:auto;border:1px solid rgba(126,222,238,.2);border-radius:26px;background:rgba(11,16,31,.62);backdrop-filter:blur(16px);box-shadow:0 28px 90px rgba(0,0,0,.3)}
+.login-form-panel{width:100%;max-width:340px;margin:auto}
+.login-brand-panel{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px;border-left:1px solid rgba(126,222,238,.2);color:#dff9ff}
+.login-brand-panel img{width:min(100%,230px);height:230px;object-fit:contain;margin-bottom:24px;border-radius:24px}
+.login-brand-panel h2{font-size:clamp(23px,3vw,36px);color:#a5ecf4;overflow-wrap:anywhere}
+.login-brand-panel p{margin-top:12px;color:#8ea3ba;font-size:14px}
+.shell.wide{width:min(100%,760px)}
+.shell.wide.register-shell{width:min(100%,340px);padding:4px 0 8px}
+.register-shell .brand{font-size:20px;margin-bottom:9px}
+.register-shell .lbl{font-size:11px;margin:0 7px 3px}
+.register-shell .inp-pill{margin-bottom:5px}
+.register-shell .inp-pill input{height:36px;padding:0 13px;font-size:12.5px}
+.register-shell .inp-pill input::placeholder{font-size:10px}
+.register-shell .grid2{gap:0 8px}
+.register-shell .hint{font-size:10px;margin:-2px 0 5px 7px}
+.register-shell .ferr{font-size:10px;min-height:8px;margin:-4px 0 4px 7px}
+.register-shell .btn{height:36px;font-size:13px}
+.register-shell .signup{margin-top:7px;font-size:11px}
+.brand{text-align:center;font-size:27px;font-weight:600;color:#a5ecf4;letter-spacing:.5px;margin:0 0 26px}
+
+/* labels above inputs (like the reference) */
+.lbl{display:block;margin:0 9px 6px;color:#85d9e6;font-size:13.5px;font-weight:500}
+.inp-pill{position:relative;margin-bottom:15px}
+.inp-pill input, select.native, textarea.native{
+  width:100%;height:46px;padding:0 20px;border-radius:999px;border:2px solid rgba(126,222,238,.72);
+  background:rgba(9,13,27,.42);color:#eafeff;font-size:14.5px;outline:none;transition:.18s}
+textarea.native{height:auto;min-height:110px;border-radius:20px;padding:13px 20px;resize:vertical;font-family:inherit}
+.inp-pill input::placeholder{color:rgba(180,215,230,.55)}
+.inp-pill input:focus,select.native:focus,textarea.native:focus{border-color:#9df2ff;box-shadow:0 0 16px rgba(126,222,238,.32)}
+select.native{color:#eafeff;margin-bottom:15px;appearance:none;-webkit-appearance:none;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='M1 1l5 5 5-5' fill='none' stroke='%2385d9e6' stroke-width='2' stroke-linecap='round'/></svg>");
+  background-repeat:no-repeat;background-position:right 18px center}
+select.native option{color:#0c2433}
+
+/* row under the password field: circular key button + remember + forgot */
+.under{display:flex;align-items:center;gap:12px;margin:-4px 4px 22px}
+.keybtn{width:44px;height:44px;min-width:44px;border-radius:50%;border:2px solid rgba(140,228,240,.9);
+  background:rgba(9,13,27,.35);color:#9df2ff;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:.18s}
+.keybtn:hover{box-shadow:0 0 14px rgba(126,222,238,.45)}
+.keybtn svg{width:19px;height:19px}
+.check{display:flex;align-items:center;gap:7px;font-size:12.5px;color:#8ea3ba;cursor:pointer;user-select:none}
+.check input{width:14px;height:14px;accent-color:#8fe6f2;cursor:pointer}
+.forgot{margin-left:auto;color:#85d9e6;font-size:13px;text-decoration:none}
+.forgot:hover{text-decoration:underline;color:#aef0f7}
+
+/* main cyan pill button */
+.btn{width:100%;height:48px;border:0;border-radius:999px;
+  background:linear-gradient(180deg,#b0f1f8,#85e0ee);color:#0b2434;font-weight:800;font-size:15.5px;
+  letter-spacing:.3px;cursor:pointer;box-shadow:0 8px 26px rgba(110,224,240,.28);transition:.18s}
+.btn:hover{filter:brightness(1.07);box-shadow:0 10px 32px rgba(110,224,240,.45);transform:translateY(-1px)}
+.btn:disabled{opacity:.6;cursor:wait;transform:none}
+#google-login{display:flex;align-items:center;justify-content:center;margin-top:12px;text-decoration:none}
+#google-login.google-disabled{opacity:.55;cursor:not-allowed;filter:saturate(.4)}
+
+/* links under the button */
+.signup{display:block;text-align:center;margin-top:24px;color:#8fe6f2;font-size:14.5px;
+  text-decoration:underline;text-underline-offset:3px}
+.signup:hover{color:#baf4fa}
+.alt{text-align:center;font-size:13px;margin-top:10px;color:#8ea3ba}
+.alt a{color:#8fe6f2;font-weight:700}.alt2{text-align:center;font-size:12.5px;margin-top:8px;color:#8ea3ba}
+.alt2 a{color:#ffd793}
+.hint{font-size:12px;color:#8ea3ba;margin:-6px 0 14px 9px}
+.hint a{color:#ffd793}
+
+/* messages / errors */
+.err{background:rgba(230,70,90,.14);border:1px solid rgba(255,110,130,.5);color:#ffd3da;
+  padding:11px 14px;border-radius:14px;font-size:13px;margin-bottom:16px;line-height:1.45}
+.ok{background:rgba(45,200,120,.13);border:1px solid rgba(90,230,150,.5);color:#d7ffe7;
+  padding:14px 16px;border-radius:14px;font-size:14px;margin-bottom:16px;line-height:1.5}
+.ok a{color:#8fe6f2;font-weight:700}
+.ferr{color:#ff9dab;font-size:12px;margin:-8px 0 10px 10px;min-height:14px}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}
+@media(max-width:560px){
+  body{padding:12px}
+  .grid2{grid-template-columns:1fr;gap:0}
+  .shell.wide{width:100%}
+  .shell.wide.register-shell{width:min(100%,340px)}
+  .brand{margin-bottom:18px}
+  .register-shell .brand{margin-bottom:8px}
+}
+@media(max-width:700px){.login-layout{width:min(100%,420px);grid-template-columns:1fr;gap:20px;padding:18px}.login-brand-panel{order:-1;border-left:0;border-bottom:1px solid rgba(126,222,238,.2);padding:10px 10px 20px}.login-brand-panel img{width:80px;height:80px;margin-bottom:8px}.login-brand-panel h2{font-size:22px}.login-brand-panel p{margin-top:5px}.login-form-panel{padding:0 3px}}
+@media(max-width:834px) and (max-height:584px){
+  body.register-page{padding:4px;overflow-y:auto}
+  .register-shell{padding:0;width:min(90vw,340px)}
+  .register-shell .brand{font-size:18px;margin-bottom:4px}
+  .register-shell .lbl{font-size:10px;margin-bottom:2px}
+  .register-shell .inp-pill{margin-bottom:3px}
+  .register-shell .inp-pill input{height:30px;padding:0 11px;font-size:12px}
+  .register-shell .hint{font-size:9px;margin:-1px 0 3px 6px}
+  .register-shell .ferr{font-size:9px;min-height:6px;margin:-3px 0 2px 6px}
+  .register-shell .btn{height:32px;font-size:12px}
+  .register-shell .signup{margin-top:4px;font-size:10px}
+}

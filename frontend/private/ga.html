@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Group Admin · VonDonald051 Savings</title>
+<link rel="stylesheet" href="/css/dash.css">
+</head>
+<body data-theme="blue">
+<canvas id="bg"></canvas>
+
+<aside class="side">
+  <div class="brand"><span class="dot"></span><span id="brand-txt">VonDonald051</span></div>
+  <div class="who">
+    <img id="u-pic" alt="profile picture">
+    <div class="meta"><div class="nm" id="u-name"></div><div class="rl" id="u-role"></div></div>
+  </div>
+  <nav id="nav" style="display:flex;flex-direction:column;gap:5px"></nav>
+  <div class="grow"></div>
+  <a class="navlink" href="#" id="logout"><span class="ico">🚪</span><span class="lbl">Logout</span></a>
+</aside>
+
+<main>
+  <section class="view on" id="view-ov">
+    <div class="hdr"><div><h2>My Group</h2><div class="sub">Group administration</div></div></div>
+    <div class="grid cols4" id="ov-stats"></div>
+    <div class="card mt" id="ov-group"></div>
+    <div class="card mt">
+      <div class="hdr"><div><h3>Member savings and loan summary</h3><div class="sub">Group KES totals for verified savings and outstanding loans · last 12 months</div></div><span class="small muted" id="ga-finance-updated">Loading…</span></div>
+      <div class="grid cols4" id="ga-finance-stats"></div>
+      <div id="ga-finance-chart" class="finance-chart-wrap" aria-live="polite"></div>
+    </div>
+      </section>
+
+  <section class="view" id="view-members">
+    <div class="hdr"><div><h2>System Agreements</h2><div class="sub">Read-only agreement status records for your group</div></div></div>
+    <div class="card wrap"><p class="small muted">Member account and profile details are not available in this view.</p><table class="tbl" id="ga-agreements-tbl"></table></div>
+  </section>
+
+  <section class="view" id="view-loans">
+    <div class="hdr"><div><h2>Items &amp; Loans</h2><div class="sub">Add borrowable items, verify and clear member loans, request your own loan</div></div></div>
+    <div class="card mb">
+      <h3 class="mb">Add item</h3>
+      <div class="grid cols4">
+        <div><label class="f">Name</label><input class="inp" id="item-name" placeholder="Item name"></div>
+        <div><label class="f">Description</label><input class="inp" id="item-desc" placeholder="Description"></div>
+        <div><label class="f">Category</label><select class="inp" id="item-category"><option value="general">Weekly item</option><option value="cap">Cap</option><option value="tshirt">T-shirt</option></select></div>
+        <div><label class="f">Price (KES)</label><input class="inp" id="item-price" type="number" min="0.01" step="0.01" placeholder="0.00"></div>
+      </div>
+      <div class="mt"><button class="btn" id="item-add">Add item</button></div>
+    </div>
+    <div class="card mb wrap"><h3 class="mb">Available items</h3><table class="tbl" id="items-tbl"></table></div>
+    <div class="card wrap"><h3 class="mb">Loan requests and repayments</h3><table class="tbl" id="loans-tbl"></table></div>
+    <div class="card mt">
+      <h3 class="mb">My Loan Request (sent to Owner)</h3>
+      <div class="grid cols3">
+        <div><label class="f">Type</label><select class="inp" id="ga-loan-type"><option value="cash">Cash</option><option value="item">Item</option></select></div>
+        <div><label class="f">Amount (KES)</label><input class="inp" id="ga-loan-amount" type="number" min="1"></div>
+        <div><label class="f">Item</label><select class="inp" id="ga-loan-item"></select></div>
+      </div>
+      <div class="mt"><button class="btn" id="ga-loan-go">Request loan (Owner approval)</button></div>
+    </div>
+  </section>
+
+  <section class="view" id="view-codes">
+    <div class="hdr"><div><h2>Safe Codes</h2><div class="sub">Generate one-time codes for new members to register</div></div></div>
+      <div class="btnrow"><button class="btn" id="gen-code">🔐 Generate code</button></div></div>
+    <div class="card mb" id="new-codes" hidden></div>
+    <div class="card wrap"><table class="tbl" id="codes-tbl"></table></div>
+  </section>
+
+  <section class="view" id="view-requests">
+    <div class="hdr"><div><h2>Access Requests</h2><div class="sub">People without accounts asking to join — approving generates their safe code</div></div></div>
+    <div class="card wrap"><table class="tbl" id="req-tbl"></table></div>
+  </section>
+
+  <section class="view" id="view-announce">
+    <div class="hdr"><div><h2>Announce to Members</h2><div class="sub">Send information to every member of your group</div></div></div>
+    <div class="card" style="max-width:560px">
+      <label class="f">Title</label><input class="inp" id="an-title" placeholder="e.g. Monthly meeting this Saturday">
+      <label class="f">Message</label><textarea class="inp" id="an-body" rows="5" placeholder="Write the announcement…"></textarea>
+      <div class="mt"><button class="btn" id="an-go">📣 Send announcement</button></div>
+    </div>
+  </section>
+
+  <section class="view" id="view-chat">
+    <div class="hdr"><div><h2>Encrypted Chat</h2><div class="sub">End-to-end encrypted with your members and administrators</div></div></div>
+    <div class="chatwrap">
+      <div class="clist" id="cList"></div>
+      <div class="chatcol">
+        <div class="chathead">
+          <div class="who2"><img id="cPeerPic" alt=""><span id="cPeerName">Select a member</span></div>
+          <div class="btnrow"><span class="e2e">🔒 End-to-end encrypted</span>
+            <button class="btn sm" id="cCall" disabled>📹 Video Call</button></div>
+        </div>
+        <div class="msgs" id="cMsgs"><div class="sysline">Pick a member on the left to start.</div></div>
+        <div class="typing" id="cTyping"></div>
+        <div class="composer">
+          <input class="inp" id="cInput" placeholder="Type an encrypted message…" disabled>
+          <button class="btn" id="cSend" disabled>Send</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="view" id="view-notif"></section>
+  <section class="view" id="view-profile"></section>
+</main>
+
+<div class="callmodal" id="callModal">
+  <div class="callbox">
+    <h3 id="callTitle">Video Call</h3>
+    <div class="vids"><video id="remoteV" autoplay playsinline></video><video id="localV" autoplay playsinline muted></video></div>
+    <div class="muted small mt" id="callStatus" style="text-align:center"></div>
+    <div class="callfoot">
+      <button class="btn" id="btnAccept">✅ Accept</button>
+      <button class="btn danger" id="btnDecline">❌ Decline</button>
+      <button class="btn danger" id="btnEnd">⏹ End call</button>
+    </div>
+  </div>
+</div>
+
+<script src="/js/runtime-config.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/ws.js"></script>
+<script src="/js/bg.js"></script>
+<script src="/js/dash.js?v=role-colors-20261012"></script>
+<script src="/js/crypto.js"></script>
+<script src="/js/chat.js"></script>
+<script src="/js/finance-chart.js"></script>
+<script src="/js/ga.js?v=staff-member-account"></script>
+</body>
+</html>

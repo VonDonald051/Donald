@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Admin · Chama Savings</title>
+<link rel="stylesheet" href="/css/dash.css">
+</head>
+<body data-theme="black">
+<canvas id="bg"></canvas>
+<aside class="side">
+  <div class="brand"><span class="dot"></span><span id="brand-txt">Chama Savings</span></div>
+  <div class="who">
+    <img id="u-pic" alt="profile picture">
+    <div class="meta"><div class="nm" id="u-name"></div><div class="rl" id="u-role"></div></div>
+  </div>
+  <nav id="nav" style="display:flex;flex-direction:column;gap:5px"></nav>
+  <div class="grow"></div>
+  <a class="navlink" href="#" id="logout"><span class="ico">Logout</span><span class="lbl">Sign out</span></a>
+</aside>
+<main>
+  <section class="view on" id="view-agreements">
+    <div class="hdr"><div><h2>System Agreements</h2><div class="sub">Read-only status records</div></div></div>
+    <div class="card wrap"><table class="tbl" id="agreements-table"></table></div>
+  </section>
+  <section class="view" id="view-audit">
+    <div class="hdr"><div><h2>Audit Log</h2><div class="sub">Latest 300 integrity-linked events</div></div></div>
+    <div class="card wrap"><table class="tbl" id="audit-table"></table></div>
+  </section>
+  <section class="view" id="view-chat">
+    <div class="hdr"><div><h2>Administrative Chat</h2><div class="sub">End-to-end encrypted messages</div></div></div>
+    <div class="chatwrap"><div class="clist" id="cList"></div><div class="chatcol"><div class="chathead"><div class="who2"><img id="cPeerPic" alt=""><span id="cPeerName">Select a contact</span></div><div class="btnrow"><span class="e2e">End-to-end encrypted</span><button class="btn sm" id="cCall" disabled>Video Call</button></div></div><div class="msgs" id="cMsgs"><div class="sysline">Choose a contact to begin.</div></div><div class="typing" id="cTyping"></div><div class="composer"><input class="inp" id="cInput" placeholder="Write an encrypted message" disabled><button class="btn" id="cSend" disabled>Send</button></div></div></div>
+  </section>
+  <section class="view" id="view-profile"></section>
+</main>
+<div class="callmodal" id="callModal"><div class="callbox"><h3 id="callTitle">Video Call</h3><div class="vids"><video id="remoteV" autoplay playsinline></video><video id="localV" autoplay playsinline muted></video></div><div class="muted small mt" id="callStatus" style="text-align:center"></div><div class="callfoot"><button class="btn" id="btnAccept">Accept</button><button class="btn danger" id="btnDecline">Decline</button><button class="btn danger" id="btnEnd">End call</button></div></div></div>
+<script src="/js/runtime-config.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/ws.js"></script>
+<script src="/js/bg.js"></script>
+<script src="/js/dash.js?v=role-colors-20261012"></script>
+<script src="/js/crypto.js"></script>
+<script src="/js/chat.js"></script>
+<script src="/js/admin.js?v=staff-member-account"></script>
+</body>
+</html>

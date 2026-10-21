@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Register · VonDonald051 Savings</title>
+<link rel="stylesheet" href="/css/auth.css">
+</head>
+<body class="register-page">
+  <canvas id="ring"></canvas>
+
+  <main class="shell wide register-shell">
+    <h1 class="brand">Register</h1>
+    <div id="err" class="err" hidden></div>
+    <div id="done" class="ok" hidden></div>
+    <form id="f" novalidate>
+      <div class="grid2">
+        <div>
+          <label class="lbl" for="firstName">First Name</label>
+          <div class="inp-pill"><input id="firstName" autocomplete="given-name" required></div>
+          <div class="ferr" id="e-firstName"></div>
+        </div>
+        <div>
+          <label class="lbl" for="lastName">Last Name</label>
+          <div class="inp-pill"><input id="lastName" autocomplete="family-name" required></div>
+          <div class="ferr" id="e-lastName"></div>
+        </div>
+      </div>
+
+      <div class="grid2">
+        <div>
+          <label class="lbl" for="email">Email</label>
+          <div class="inp-pill"><input id="email" type="email" autocomplete="email" required></div>
+          <div class="ferr" id="e-email"></div>
+        </div>
+        <div>
+          <label class="lbl" for="phone">Phone Number</label>
+          <div class="inp-pill"><input id="phone" type="tel" autocomplete="tel" placeholder="+2547XXXXXXXX" required></div>
+          <div class="ferr" id="e-phone"></div>
+        </div>
+      </div>
+
+      <label class="lbl" for="safeCode">Safe Code</label>
+      <div class="inp-pill"><input id="safeCode" autocomplete="off" placeholder="VD-XXXX-XXXX from your Group Admin" required></div>
+      <p class="hint">No safe code? <a href="/request.html">Request one</a> — the Group Admin generates it for new members.</p>
+      <div class="ferr" id="e-safeCode"></div>
+
+      <div class="grid2">
+        <div>
+          <label class="lbl" for="password">Password</label>
+          <div class="inp-pill"><input id="password" type="password" autocomplete="new-password" required>
+            <button type="button" class="keybtn" id="peek1" title="Show / hide password" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);width:36px;height:36px;min-width:36px;border-width:0">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+        </div>
+        <div>
+          <label class="lbl" for="confirmPassword">Confirm Password</label>
+          <div class="inp-pill"><input id="confirmPassword" type="password" autocomplete="new-password" required></div>
+        </div>
+      </div>
+
+      <div class="ferr" id="e-password"></div>
+      <button class="btn" id="go" type="submit">Register</button>
+    </form>
+    <a class="signup" href="/login.html">Already have an account? Login</a>
+  </main>
+
+<script src="/js/runtime-config.js"></script>
+<script src="/js/api.js"></script>
+  <script src="/js/ring.js"></script>
+  <script src="/js/register.js"></script>
+</body>
+</html>
