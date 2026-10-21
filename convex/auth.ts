@@ -162,7 +162,7 @@ export const changePassword = internalAction({
 export const verifyOwnerPassword = internalAction({
   args: { ownerId: v.number(), password: v.string() },
   returns: v.boolean(),
-  handler: async (ctx, args): Promise<Record<string, unknown>> => {
+  handler: async (ctx, args): Promise<boolean> => {
     const user = await ctx.runQuery(internal.legacy.userById, { userId: args.ownerId }) as Record<string, unknown> | null;
     if (!user || user.role !== "v_super_admin" || args.password.length > 4096) return false;
     const match = String(user.passHash || "").match(/^s2\$([a-f0-9]{32})\$([a-f0-9]{128})$/i);
@@ -180,14 +180,15 @@ export const createStaffUser = internalAction({
     lastName: v.string(), email: v.string(), phone: v.string(), password: v.string(), now: v.string(),
   },
   returns: v.any(),
-  handler: async (ctx, args) => {
+  handler: async (ctx, args): Promise<{ status: number; error: string | null; errors: unknown; user: unknown }> => {
     const salt = crypto.randomBytes(16);
     const hash = crypto.scryptSync(args.password, salt, 64, { N: 16384, r: 8, p: 1, maxmem: 64 * 1024 * 1024 });
-    return await ctx.runMutation(internal.legacy.createManagedStaffAccount, {
+    const result: { status: number; error: string | null; errors: unknown; user: unknown } = await ctx.runMutation(internal.legacy.createManagedStaffAccount, {
       ownerId: args.ownerId, role: args.role, firstName: args.firstName, lastName: args.lastName,
       email: args.email, phone: args.phone,
       passHash: `s2$${salt.toString("hex")}$${hash.toString("hex")}`, now: args.now,
     });
+    return result;
   },
 });
 

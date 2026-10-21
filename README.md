@@ -31,6 +31,13 @@ For the cross-origin frontend cutover, the Vercel origin is `https://donald-ss.v
 for exact origins in that list; do not use a wildcard origin. The frontend still uses Node by
 default until its API base URL is switched.
 
+The complete Node application cannot currently run unchanged as a Vercel static deployment or
+serverless function: it starts its own HTTP listener and scheduler and stores its encrypted database
+and uploads on local disk. Vercel needs function handlers and durable database/file storage. The
+Convex port is incomplete, so pointing the live frontend at it would break unported routes. Use the
+included systemd/Nginx deployment for the complete application until the remaining backend features
+and persistent storage have been migrated.
+
 Run `npm run typecheck:convex` to type-check the Convex functions and `npx convex dev --once` to
 deploy to the configured development deployment. `node scripts/export-legacy-convex.js` creates a
 permission-restricted temporary JSONLines export from the encrypted local database; review the
