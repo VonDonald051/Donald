@@ -14,6 +14,7 @@ const hub = require('../hub');
 const agreementCodes = require('../agreement-codes');
 const agreementViews = require('../system-agreement-views');
 const financeTrends = require('../finance-trends');
+const { currentWeekKey } = require('../week-key');
 
 const r = new Router();
 r.use(sec.auth, sec.requireRole('group_admin'));
@@ -29,7 +30,6 @@ const ownerReviewEntry = entry => !!entry.staffRequest || sec.isStaffRole(dbm.db
 
 function myGroup(req) { return dbm.db.groups.find(g => g.id === req.user.groupId) || null; }
 function memberFor(req, id) { return dbm.db.users.find(u => u.id === Number(id) && !u.deleted && u.role === 'member' && u.groupId === req.user.groupId); }
-function weekKey() { const d = new Date(); const start = new Date(Date.UTC(d.getUTCFullYear(), 0, 1)); return `${d.getUTCFullYear()}-${Math.ceil((((d - start) / 86400000) + start.getUTCDay() + 1) / 7)}`; }
 
 // Group Admin receives only status records for this group; no member IDs or profile data.
 r.get('/system-agreements', (req, res) => agreementViews.listSystemAgreements(req, res, { groupOnly: true }));
@@ -242,7 +242,7 @@ r.post('/my-loans', (req, res) => {
   if (!memberProfile || !memberProfile.registrationFeePaid) return res.status(400).json({ error: 'Pay the KES 200 registration fee first' });
   if (!sec.isStaffRole(req.user) && !memberProfile.agreementSigned) return res.status(400).json({ error: 'Sign the Kenya Chama Agreement first' });
   if (dbm.hasUnclearedCashLoan(req.user.id)) return res.status(400).json({ error: 'You have an uncleared loan. Clear it before borrowing again.' });
-  const wk = weekKey();
+  const wk = currentWeekKey();
   const idempotencyKey = b.idempotencyKey || sec.generateIdempotencyKey('ga-loan');
   if (dbm.db.cashLoans.some(l => l.userId === req.user.id && l.type === 'cash' && l.week === wk && l.status !== 'rejected') || dbm.db.itemLoans.some(l => l.userId === req.user.id && l.type === 'item' && l.week === wk && l.status !== 'rejected')) {
     return res.status(400).json({ error: `Only one ${type} loan is allowed per week` });

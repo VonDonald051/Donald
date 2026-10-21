@@ -14,6 +14,7 @@ const agreementPdf = require('../agreement-pdf');
 const agreementStorage = require('../agreement-storage');
 const agreementUpload = require('../agreement-upload');
 const financeTrends = require('../finance-trends');
+const { currentWeekKey } = require('../week-key');
 const { Router } = require('../httpmini');
 
 const r = new Router();
@@ -408,7 +409,7 @@ r.post('/member-profile/savings', (req, res) => {
   if (!staffMemberAccount(req) && !hasSignedAgreement(req.user.id)) return res.status(400).json({ error: 'Sign the current system agreement first' });
   const amountCents = dbm.toCents((req.body || {}).amount);
   const description = sec.clean((req.body || {}).description || '', 200);
-  const currentWeek = weekKey();
+  const currentWeek = currentWeekKey();
   const requestedWeek = sec.clean((req.body || {}).week || '', 8);
   if (requestedWeek && requestedWeek !== currentWeek) return res.status(400).json({ error: 'Savings can only be recorded for the current week' });
   const wk = currentWeek;
@@ -633,7 +634,7 @@ r.post('/member-profile/loans', (req, res) => {
 
   const b = req.body || {}, type = b.type === 'item' ? 'item' : b.type === 'cash' ? 'cash' : null;
   if (!type) return res.status(400).json({ error: 'Choose cash or item' });
-  const wk = weekKey();
+  const wk = currentWeekKey();
   const idempotencyKey = b.idempotencyKey || sec.generateIdempotencyKey('member-loan');
   if (dbm.db.cashLoans.some(l => l.userId === req.user.id && l.type === 'cash' && l.week === wk && l.status !== 'rejected') || dbm.db.itemLoans.some(l => l.userId === req.user.id && l.type === 'item' && l.week === wk && l.status !== 'rejected')) {
     return res.status(400).json({ error: `Only one ${type} loan is allowed per week` });
@@ -752,5 +753,3 @@ r.post('/notifications/:id/read', (req, res) => {
 });
 
 module.exports = r;
-
-function weekKey() { const d = new Date(); const start = new Date(Date.UTC(d.getUTCFullYear(), 0, 1)); return `${d.getUTCFullYear()}-${Math.ceil((((d - start) / 86400000) + start.getUTCDay() + 1) / 7)}`; }

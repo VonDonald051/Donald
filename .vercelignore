@@ -1,0 +1,8 @@
+.env
+.env.*
+!.env.example
+database/data/**
+database/uploads/**
+database/backups/**
+*.vdb
+*.log

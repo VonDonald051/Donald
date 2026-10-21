@@ -133,6 +133,32 @@ app.use('/api', sec.apiNoStore);
 app.use('/api', sec.originGuard);
 app.use('/api', sec.apiThrottle);
 
+// Temporary PHP migration bridge for legacy s2$ password records. It is
+// protected by a deployment-only 256-bit secret and separately rate limited.
+app.post('/api/legacy-scrypt-verify', sec.limiter(60e3, 20, 'Too many password verification requests.'), (req, res) => {
+  const expected = String(process.env.LEGACY_SCRYPT_BRIDGE_SECRET || '');
+  const supplied = String(req.headers['x-legacy-scrypt-bridge'] || '');
+  if (!/^[a-f0-9]{64}$/i.test(expected) || !/^[a-f0-9]{64}$/i.test(supplied) || supplied.length !== expected.length ||
+      !require('crypto').timingSafeEqual(Buffer.from(supplied, 'hex'), Buffer.from(expected, 'hex'))) {
+    return res.status(404).json({ error: 'Not found.' });
+  }
+  const body = req.body || {};
+  const password = body.password;
+  const stored = body.hash;
+  if (typeof password !== 'string' || password.length > 4096 || typeof stored !== 'string' || !/^s2\$[a-f0-9]{32}\$[a-f0-9]{128}$/i.test(stored)) {
+    return res.status(400).json({ error: 'Invalid verification request.' });
+  }
+  try {
+    const [, saltHex, expectedHex] = stored.split('$');
+    const actual = require('crypto').scryptSync(password, Buffer.from(saltHex, 'hex'), 64, { N: 16384, r: 8, p: 1, maxmem: 64 * 1024 * 1024 });
+    res.setHeader('Cache-Control', 'no-store, private');
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    return res.json({ verified: require('crypto').timingSafeEqual(actual, Buffer.from(expectedHex, 'hex')) });
+  } catch {
+    return res.status(400).json({ error: 'Verification failed.' });
+  }
+});
+
 // ---- API routes ----
 app.use('/api/auth', require('./src/routes/auth'));
 app.use('/api/me', require('./src/routes/me'));

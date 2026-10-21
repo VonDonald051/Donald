@@ -12,6 +12,7 @@ const emailer = require('../emailer');
 const reports = require('../reports');
 const hub = require('../hub');
 const agreementViews = require('../system-agreement-views');
+const dashboardData = require('../weekly-dashboard-trend');
 
 const r = new Router();
 r.use(sec.auth, sec.requireRole('super_admin'));
@@ -197,25 +198,7 @@ r.get('/groups/:id/report', (req, res) => {
   if (fmt === 'csv') return reports.sendCSV(res, g, req);
   return reports.sendPDF(res, g, req);
 });
-r.get('/charts/trends', (req, res) => {
-  const weeks = 12;
-  const now = new Date();
-  const labels = [];
-  const savingsData = [];
-  const loansData = [];
-  for (let i = weeks - 1; i >= 0; i--) {
-    const d = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - i * 7));
-    const yr = d.getUTCFullYear();
-    const wk = Math.ceil((((d - new Date(Date.UTC(yr, 0, 1))) / 86400000) + new Date(Date.UTC(yr, 0, 1)).getUTCDay() + 1) / 7);
-    const key = `${yr}-${wk}`;
-    labels.push(key);
-    const sTotal = dbm.db.savings.filter(s => s.week === key && !s.reversed && (!s.status || s.status === 'verified')).reduce((n, s) => n + Number(s.amountCents || 0), 0);
-    const lTotal = dbm.db.cashLoans.filter(l => l.week === key && !['rejected', 'cleared'].includes(l.status)).reduce((n, l) => n + Number(l.amountCents || 0), 0) + dbm.db.itemLoans.filter(l => l.week === key && !['rejected', 'cleared'].includes(l.status)).reduce((n, l) => n + Number(l.costCents || l.amountCents || 0), 0);
-    savingsData.push(dbm.fromCents(sTotal));
-    loansData.push(dbm.fromCents(lTotal));
-  }
-  res.json({ labels, savings: savingsData, loans: loansData });
-});
+r.get('/charts/trends', (req, res) => res.json(dashboardData.buildWeeklyDashboardTrend(dbm.db, dbm.fromCents)));
 r.get('/members/:id/report', (req, res) => {
   const u = dbm.db.users.find(x => x.id === Number(req.params.id) && !x.deleted && x.role === 'member');
   if (!u) return res.status(404).json({ error: 'Member not found' });
@@ -226,10 +209,7 @@ r.get('/members/:id/report', (req, res) => {
   return reports.sendStaffMemberPDF(res, u, dbm.memberProfileFor(u.id), req);
 });
 r.get('/exports', (req, res) => {
-  const rows = dbm.db.exports.slice(-250).reverse().map(e => ({
-    id: e.id, userId: e.userId, userRole: e.userRole, type: e.type, target: e.target, format: e.format, at: e.at
-  }));
-  res.json({ exports: rows });
+  res.json({ exports: dashboardData.exportHistory(dbm.db) });
 });
 
 module.exports = r;

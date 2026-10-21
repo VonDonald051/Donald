@@ -29,7 +29,7 @@ function sealKey() {
   return key;
 }
 
-function verificationUrl(code) {
+function verificationBase() {
   const base = String(process.env.AGREEMENT_VERIFY_BASE_URL || '').replace(/\/$/, '');
   let parsed;
   try { parsed = new URL(base); } catch { throw new Error('Agreement verification URL is not configured.'); }
@@ -38,21 +38,18 @@ function verificationUrl(code) {
   if ((parsed.protocol !== 'https:' && !localHttp) || parsed.username || parsed.password || parsed.search || parsed.hash || !parsed.pathname.endsWith('/a')) {
     throw new Error('Agreement verification URL must be a clean HTTPS /a URL (loopback HTTP is allowed only outside production).');
   }
-  const url = `${base}/${codes.verificationToken(code)}`;
+  return base;
+}
+
+function verificationUrl(code) {
+  const url = `${verificationBase()}/${codes.verificationToken(code)}`;
   if (Buffer.byteLength(url, 'utf8') > 53) throw new Error('Agreement verification URL is too long for the current QR generator.');
   return url;
 }
 
 function assertConfigured() {
   sealKey();
-  const base = String(process.env.AGREEMENT_VERIFY_BASE_URL || '').replace(/\/$/, '');
-  let parsed;
-  try { parsed = new URL(base); } catch { throw new Error('Agreement verification URL is not configured.'); }
-  const localHttp = process.env.NODE_ENV !== 'production' && parsed.protocol === 'http:'
-    && ['127.0.0.1', 'localhost', '[::1]'].includes(parsed.hostname);
-  if ((parsed.protocol !== 'https:' && !localHttp) || parsed.username || parsed.password || parsed.search || parsed.hash || !parsed.pathname.endsWith('/a')) {
-    throw new Error('Agreement verification URL must be a clean HTTPS /a URL (loopback HTTP is allowed only outside production).');
-  }
+  const base = verificationBase();
   if (Buffer.byteLength(`${base}/${'A'.repeat(22)}`, 'utf8') > 53) throw new Error('Agreement verification URL is too long for the current QR generator.');
 }
 
